@@ -1,5 +1,6 @@
 import { getProductById } from '../../lib/api';
 import Image from 'next/image';
+import AddToCartButton from '../../components/AddToCartButton';
 
 export default async function ProductoDetalle({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -20,9 +21,7 @@ export default async function ProductoDetalle({ params }: { params: Promise<{ id
         <p className="text-gray-600 mb-4">{product.description}</p>
         <p className="text-sky-600 font-bold text-3xl mb-6">${product.price}</p>
         <p className="text-sm text-gray-500 mb-4">Stock disponible: {product.stock}</p>
-        <button className="bg-sky-600 text-white px-6 py-3 rounded hover:bg-sky-700">
-          Agregar al carrito
-        </button>
+        <AddToCartButton productId={product.id} />
       </div>
     </div>
   );

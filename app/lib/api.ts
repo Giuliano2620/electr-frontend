@@ -4,6 +4,12 @@ export async function getProducts() {
   return data;
 }
 
+export async function getProductById(id: string) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`);
+  const data = await res.json();
+  return data;
+}
+
 export async function loginUser(email: string, password: string) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
     method: 'POST',
@@ -31,8 +37,24 @@ export async function registerUser(name: string, email: string, password: string
 
   return res.json();
 }
-export async function getProductById(id: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`);
-  const data = await res.json();
-  return data;
+
+export async function addToCart(productId: number, quantity: number, token: string) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ productId, quantity }),
+  });
+  return res.json();
+}
+
+export async function getCart(token: string) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.json();
 }
