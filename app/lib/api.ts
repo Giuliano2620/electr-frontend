@@ -31,3 +31,8 @@ export async function registerUser(name: string, email: string, password: string
 
   return res.json();
 }
+export async function getProductById(id: string) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`);
+  const data = await res.json();
+  return data;
+}
