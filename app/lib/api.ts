@@ -58,3 +58,18 @@ export async function getCart(token: string) {
   });
   return res.json();
 }
+
+export async function createOrder(token: string) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error('Error al crear la orden');
+  }
+
+  return res.json();
+}

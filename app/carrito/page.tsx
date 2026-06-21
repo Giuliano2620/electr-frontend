@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { getCart } from '../lib/api';
+import { getCart, createOrder } from '../lib/api';
 import Image from 'next/image';
 
 interface CartItem {
@@ -20,6 +20,7 @@ export default function CarritoPage() {
   const { token } = useAuth();
   const [items, setItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     if (!token) {
@@ -32,9 +33,22 @@ export default function CarritoPage() {
     });
   }, [token]);
 
+  const handleCheckout = async () => {
+    if (!token) return;
+    try {
+      await createOrder(token);
+      setItems([]);
+      setSuccess(true);
+    } catch (err) {
+      alert('Hubo un error al procesar la compra');
+    }
+  };
+
   if (loading) return <p className="text-center mt-12">Cargando...</p>;
 
   if (!token) return <p className="text-center mt-12">Iniciá sesión para ver tu carrito.</p>;
+
+  if (success) return <p className="text-center mt-12 text-green-600 font-semibold">¡Compra realizada con éxito! 🎉</p>;
 
   if (items.length === 0) return <p className="text-center mt-12">Tu carrito está vacío.</p>;
 
@@ -59,7 +73,7 @@ export default function CarritoPage() {
       </div>
       <div className="mt-6 text-right">
         <p className="text-2xl font-bold">Total: ${total}</p>
-        <button className="mt-4 bg-sky-600 text-white px-6 py-3 rounded hover:bg-sky-700">
+        <button onClick={handleCheckout} className="mt-4 bg-sky-600 text-white px-6 py-3 rounded hover:bg-sky-700">
           Finalizar compra
         </button>
       </div>
