@@ -95,3 +95,75 @@ export async function updateCartItem(itemId: number, quantity: number, token: st
   });
   return res.json();
 }
+
+export async function createProduct(data: {
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  imageUrl: string;
+  categoryId: number;
+}, token: string) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    throw new Error('Error al crear el producto');
+  }
+
+  return res.json();
+}
+
+export async function deleteProduct(id: number, token: string) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.json();
+}
+
+export async function uploadImage(file: File, token: string) {
+  const formData = new FormData();
+  formData.append('image', file);
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/upload`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  return res.json();
+}
+
+export async function updateProduct(id: number, data: {
+  name?: string;
+  description?: string;
+  price?: number;
+  stock?: number;
+  imageUrl?: string;
+}, token: string) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    throw new Error('Error al actualizar el producto');
+  }
+
+  return res.json();
+}

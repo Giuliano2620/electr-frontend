@@ -1,18 +1,14 @@
 import { getProducts } from '../lib/api';
-import { Product } from '../types';
-import ProductCard from '../components/ProductCard';
+import { Producto } from '../types';
+import ProductFilter from '../components/ProductFilter';
 
 export default async function ProductosPage() {
-  const products = await getProducts();
+  const products: Producto[] = await getProducts();
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Todos los productos</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {products.map((product: Product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
+    <div className="max-w-6xl mx-auto px-4 py-12">
+      <h1 className="text-3xl font-bold text-black mb-6">Todos los productos</h1>
+      <ProductFilter products={products} />
     </div>
   );
 }
